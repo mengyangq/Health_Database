@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaccination Record Management</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="top-banner">
+        <div class="container">
+            <div></div>
+            <h2 style="color:white">Vaccination Record Management</h2>
+            <a href="index.html" class="btn btn-home">Home</a>
+        </div>
+    </div>
+    <br>
+    <div class="container">
+        <form id="search-form" class="search-form">
+            <div class="row">
+                <div class="col-md-2">
+                    <label for="eid">Employee ID (if known)</label>
+                    <input type="text" class="form-control" id="eid" name="eid">
+                </div>
+                <div class="col-md-2">
+                    <label for="fid">Facility ID (if known)</label>
+                    <input type="text" class="form-control" id="fid" name="fid">
+                </div>
+                <div class="col-md-3">
+                    <label for="brand">Brand (if known)</label>
+                    <input type="text" class="form-control" id="brand" name="brand">
+                </div>
+                <div class="col-md-3">
+                    <label for="vdate">Vaccination Date (if known)</label>
+                    <input type="date" class="form-control" id="vdate" name="vdate">
+                </div>
+                <div class="col-md-2 text-right">
+                    <input type="submit" value="Search" style="margin-top: 25px;" class="btn btn-primary">
+                </div>
+            </div>
+        </form>
+        <br>
+        <div class="text-right">
+            <button id="insert-vaccination-btn" class="btn btn-warning" data-toggle="modal"
+                data-target="#insertVaccinationModal">
+                Add Vaccination Record
+            </button>
+        </div>
+        <br>
+        <br>
+        <div id="search-results">
+        </div>
+    </div>
+    
+     <!-- Update Schedule Modal -->
+    <div class="modal fade" id="update-vaccination-modal" tabindex="-1" role="dialog" aria-labelledby="updateVaccinationLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateVaccinationLabel">Update Vaccination Record</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="update-vaccination-form">
+                        <!-- Form fields for each column will be added here -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="update-vaccination-submit">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="vaccination.js"></script>
+</body>
+</html>

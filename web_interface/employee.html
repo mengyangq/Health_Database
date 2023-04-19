@@ -1,0 +1,118 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="top-banner">
+        <div class="container">
+            <div></div>
+            <h2 style="color:white">Employee</h2>
+            <a href="index.html" class="btn btn-home">Home</a>
+        </div>
+    </div>
+    <br>
+
+    <div class="container">
+        <form id="search-form" class="search-form">
+            <div class="row">
+                <div class="col-md-2">
+                    <label for="eid">Employee ID (if known)</label>
+                    <input type="text" class="form-control" id="eid" name="eid">
+                </div>
+                <div class="col-md-3">
+                    <label for="fname">Employee First Name (if known)</label>
+                    <input type="text" class="form-control" id="fname" name="fname">
+                </div>
+                <div class="col-md-3">
+                    <label for="lname">Employee Last Name (if known)</label>
+                    <input type="text" class="form-control" id="lname" name="lname">
+                </div>
+                <div class="col-md-2">
+                    <label for="fid">Facility ID (if known)</label>
+                    <input type="text" class="form-control" id="fid" name="fid">
+                </div>
+                <div class="col-md-2">
+                    <label for="facilityName">Facility Name (if known)</label>
+                    <input type="text" class="form-control" id="facilityName" name="facilityName">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Role</label>
+                    <div class="checkbox-container">
+                        <label><input type="checkbox" name="role" value="nurse">Nurse</label>
+                        <label><input type="checkbox" name="role" value="doctor">Doctor</label>
+                        <label><input type="checkbox" name="role" value="pharmacist">Pharmacist</label>
+                        <label><input type="checkbox" name="role" value="receptionist">Receptionist</label>
+                        <label><input type="checkbox" name="role" value="administrative personnel">Administrative
+                            Personnel</label>
+                        <label><input type="checkbox" name="role" value="security personnel">Security Personnel</label>
+                        <label><input type="checkbox" name="role" value="regular employee">Regular Employee</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label for="startDate">Start Date</label>
+                    <input type="date" class="form-control" id="startDate" name="startDate">
+                </div>
+                <div class="col-md-3">
+                    <label for="endDate">End Date</label>
+                    <input type="date" class="form-control" id="endDate" name="endDate">
+                </div>
+                <div class="col-md-3 text-right">
+                    <input type="submit" value="Search" style="margin-top: 25px;" class="btn btn-primary">
+                </div>
+            </div>
+        </form>
+        <br>
+
+        <div class="text-right">
+            <button id="insert-employee-btn" class="btn btn-warning" data-toggle="modal"
+                data-target="#insertEmployeeModal">
+                Add an Employee
+            </button>
+        </div>
+
+        <br>
+        <br>
+
+        <div id="search-results">
+        </div>
+    </div>
+
+    <!-- Update Employee Modal -->
+    <div class="modal fade" id="update-employee-modal" tabindex="-1" role="dialog" aria-labelledby="updateEmployeeLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateEmployeeLabel">Update Employee</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="update-employee-form">
+                        <!-- Form fields for each column will be added here -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="update-employee-submit">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="employee.js"></script>
+
+</body>
+
+</html>

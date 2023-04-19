@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Facility</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+</head>
+
+<body>
+  <div class="top-banner">
+    <div class="container">
+      <div></div>
+      <h2 style="color:white">Facility</h2>
+      <a href="index.html" class="btn btn-home">Home</a>
+    </div>
+  </div>
+  <br>
+
+  <div class="container">
+    <form id="search-form" class="search-form">
+      <div class="row">
+        <div class="col-md-2">
+          <label for="fid">Facility ID (if known)</label>
+          <input type="text" class="form-control" id="fid" name="fid">
+        </div>
+        <div class="col-md-3">
+          <label for="name">Facility Name (if known)</label>
+          <input type="text" class="form-control" id="fname" name="fname">
+        </div>
+        <div class="col-md-2">
+          <label>City</label>
+          <div class="checkbox-container">
+            <label><input type="checkbox" name="city" value="Toronto">Toronto</label>
+            <label><input type="checkbox" name="city" value="Montreal">Montreal</label>
+            <label><input type="checkbox" name="city" value="Vancouver">Vancouver</label>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <label>Province</label>
+          <div class="checkbox-container">
+            <label><input type="checkbox" name="province" value="ON">ON</label>
+            <label><input type="checkbox" name="province" value="BC">BC</label>
+            <label><input type="checkbox" name="province" value="QC">QC</label>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <label>Type</label>
+          <div class="checkbox-container">
+            <label><input type="checkbox" name="type" value="hospital">Hospital</label>
+            <label><input type="checkbox" name="type" value="clinic">Clinic</label>
+            <label><input type="checkbox" name="type" value="pharmacy">Pharmacy</label>
+            <label><input type="checkbox" name="type" value="special installment">Special Installment</label>
+            <label><input type="checkbox" name="type" value="CLSC">CLSC</label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <label for="minCapacity">Min Capacity</label>
+          <input type="number" class="form-control" id="minCapacity" name="minCapacity">
+        </div>
+        <div class="col-md-3">
+          <label for="maxCapacity">Max Capacity</label>
+          <input type="number" class="form-control" id="maxCapacity" name="maxCapacity">
+        </div>
+        <div class="col-md-6 text-right">
+          <input type="submit" value="Search" style="margin-top: 25px;" class="btn btn-primary">
+        </div>
+      </div>
+    </form>
+
+    <br>
+
+    <div class="text-right">
+      <button id="insert-facility-btn" class="btn btn-warning" data-toggle="modal" data-target="#insertFacilityModal">
+        Add a Facility
+      </button>
+    </div>
+
+    <br>
+    <br>
+
+    <div id="search-results">
+    </div>
+  </div>
+
+
+
+  <!-- Update Facility Modal -->
+  <div class="modal fade" id="update-facility-modal" tabindex="-1" role="dialog" aria-labelledby="updateFacilityLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="updateFacilityLabel">Update Facility</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="update-facility-form">
+            <!-- Form fields for each column will be added here -->
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="update-facility-submit">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Map Modal -->
+  <div id="map-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Facility Location</h4>
+        </div>
+        <div class="modal-body" id="map-modal-body">
+          <!-- The map will be inserted here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Must be at the end of the file, otherwise some functions won't work. -->
+  <script src="facility.js"></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgme3VGDLdOY5YQKs16U-EVAJpSXzHIfY&callback=mapsApiLoaded"></script>
+
+</body>
+
+</html>

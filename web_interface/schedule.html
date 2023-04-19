@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="top-banner">
+        <div class="container">
+            <div></div>
+            <h2 style="color:white">Schedule</h2>
+            <a href="index.html" class="btn btn-home">Home</a>
+        </div>
+    </div>
+    <br>
+
+    <div class="container">
+        <form id="search-form" class="search-form">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="eid">Employee ID (if known)</label>
+                    <input type="text" class="form-control" id="eid" name="eid">
+                </div>
+                <div class="col-md-3">
+                    <label for="fid">Facility ID (if known)</label>
+                    <input type="text" class="form-control" id="fid" name="fid">
+                </div>
+                <div class="col-md-3">
+                    <label for="date">Date (if known)</label>
+                    <input type="date" class="form-control" id="date" name="date">
+                </div>
+                <div class="col-md-3 text-right">
+                    <input type="submit" value="Search" style="margin-top: 25px;" class="btn btn-primary">
+                </div>
+            </div>
+        </form>
+        <br>
+
+        <div class="text-right">
+            <button id="insert-schedule-btn" class="btn btn-warning" data-toggle="modal"
+                data-target="#insertScheduleModal">
+                Add a Schedule
+            </button>
+        </div>
+
+        <br>
+        <br>
+
+        <div id="search-results">
+        </div>
+    </div>
+
+    <!-- Update Schedule Modal -->
+    <div class="modal fade" id="update-schedule-modal" tabindex="-1" role="dialog" aria-labelledby="updateScheduleLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateScheduleLabel">Update Schedule</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="update-schedule-form">
+                        <!-- Form fields for each column will be added here -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="update-schedule-submit">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="schedule.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Query</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <div class="top-banner">
+    <div class="container">
+      <div></div>
+      <h2 style="color:white">Advanced Query</h2>
+      <a href="index.html" class="btn btn-home">Home</a>
+    </div>
+  </div>
+  <br>
+  <div class="container">
+    <div>
+      Q6. Get details of all the facilities in the system. Details include facility’s name,
+      address, city, province, postal-code, phone number, web address, type, capacity, general manager’s name and number
+      of employees currently working for the facility. Results should be displayed sorted in ascending order by
+      province, then by city, then by type, then by number of employees currently working for the facility.
+    </div>
+    <div id="sql-code-block-q6" class="sql-code-block">
+      <pre><code class="language-sql">
+    SELECT
+        f.FName,
+        f.Address,
+        f.City,
+        f.Province,
+        f.Postal_Code,
+        f.Phone_Number,
+        f.Web_Address,
+        f.FType,
+        f.Capacity,
+        CONCAT(e.FName, ' ', e.LName) AS ManagerName,
+        COUNT(DISTINCT r.EID) AS NumEmployees
+    FROM
+        Facilities f
+            LEFT JOIN
+        Managed_by m ON f.FID = m.FID
+            LEFT JOIN
+        Employees e ON m.EID = e.EID
+            LEFT JOIN
+        Roles r ON f.FID = r.FID AND r.end_date IS NULL
+    GROUP BY f.FID , e.FName , e.LName
+    ORDER BY f.Province ASC , f.City ASC , f.FType ASC , NumEmployees ASC;
+    </code></pre>
+    </div>
+    <div class="text-right">
+      <button class="btn btn-primary check-sql-q6" data-target="#sql-code-block-q6">Check</button>
+    </div>
+    <br>
+    <div id="query-results-q6"></div>
+    <br>
+    <br>
+
+    <div>
+      Q7. Get details of all the employees currently working in a specific facility. Details include employee’s
+      first-name, last-name, start date of work, date of birth, Medicare card number, telephone-number, address, city,
+      province, postal-code, citizenship, and email address. Results should be displayed sorted in ascending order by
+      role, then by first name, then by last name.
+    </div>
+    <div>
+      <label for="facility-id">Facility ID:</label>
+      <input type="number" id="facility-id-q7" name="facility-id-q7" value="1005">
+    </div>
+    <div id="sql-code-block-q7" class="sql-code-block">
+      <pre><code class="language-sql">
+    SELECT
+        f.FID,
+        e.FName,
+        e.LName,
+        r.Start_Date,
+        e.DoB,
+        e.Medicare_Number,
+        e.Telephone_Number,
+        e.Address,
+        e.City,
+        e.Province,
+        e.Postal_code,
+        e.Citizenship,
+        e.Email
+    FROM
+        Employees e
+            JOIN
+        Roles r ON e.EID = r.EID
+            JOIN
+        Facilities f ON f.FID = r.FID
+    WHERE
+        r.end_date IS NULL
+        AND f.FID = ? 
+    GROUP BY f.FID , e.EID
+    ORDER BY f.FID ASC , r.title ASC , e.FName ASC , e.LName ASC;
+    </code></pre>
+    </div>
+    <div class="text-right">
+      <button class="btn btn-primary check-sql-q7" data-target="#sql-code-block-q7">Check</button>
+    </div>
+    <br>
+    <div id="query-results-q7"></div>
+    <br>
+    <br>
+
+    <div>
+      Q8. For a given employee, get the details of all the schedules she/he has been scheduled during a specific period
+      of time. Details include facility name, day of the year, start time and end time. Results should be displayed
+      sorted in ascending order by facility name, then by day of the year, then by start time.
+    </div>
+    <div>
+      <label for="employee-id">Employee ID:</label>
+      <input type="number" id="employee-id-q8" name="employee-id-q8" value="123021">
+    </div>
+    <div>
+      <label for="startDate">Start Date: </label>
+      <input type="date" id="startDate-q8" name="startDate-q8" value="2023-01-01">
+      <label for="endDate">End Date: </label>
+      <input type="date" id="endDate-q8" name="endDate-q8" value="2023-12-31">
+    </div>
+    <div id="sql-code-block-q8" class="sql-code-block">
+      <pre><code class="language-sql">
+    SELECT
+        f.FName AS Facility,
+        e.FName,
+        e.LName,
+        s.date,
+        DAYOFYEAR(s.date) AS 'Day of the year',
+        s.start_time,
+        s.end_time
+    FROM
+        Facilities f
+            JOIN
+        Schedule s ON f.FID = s.FID
+            JOIN
+        Employees e ON s.EID = e.EID
+    WHERE
+        s.EID = ?
+            AND s.date BETWEEN ? AND ?
+    ORDER BY f.FName ASC , DAYOFYEAR(s.date) ASC , s.start_time ASC;
+    </code></pre>
+    </div>
+    <div class="text-right">
+      <button class="btn btn-primary check-sql-q8" data-target="#sql-code-block-q8">Check</button>
+    </div>
+    <br>
+    <div id="query-results-q8"></div>
+    <br>
+    <br>
+
+
+    <div>
+      Q9. Get details of all the doctors who have been infected by COVID-19 in the past two weeks. Details include the
+      doctor's first-name, last-name, date of infection, and the name of the facility that the doctor is currently
+      working for. Results should be displayed sorted in ascending order by the facility name, then by the first-name of
+      the doctor.
+    </div>
+
+    <div id="sql-code-block-q9" class="sql-code-block">
+      <pre><code class="language-sql">
+    SELECT 
+        e.EID, e.FName AS First_Name, e.LName AS Last_Name, i.I_date, f.FName As Facility_Name
+    FROM
+        Employees e
+            LEFT JOIN
+        Infection i ON e.EID = i.EID
+            JOIN
+        Roles r ON e.EID = r.EID AND r.end_date IS NULL
+            JOIN
+        Facilities f ON r.FID = f.FID
+    WHERE
+        Nature = 'COVID-19'
+            AND r.Title = 'Doctor'
+            AND i.I_date BETWEEN DATE_SUB(NOW(), INTERVAL 2 WEEK) AND NOW()
+    ORDER BY f.FName ASC , e.FName ASC;
+    </code></pre>
+    </div>
+    <div class="text-right">
+      <button class="btn btn-primary check-sql-q9" data-target="#sql-code-block-q9">Check</button>
+    </div>
+    <br>
+    <div id="query-results-q9"></div>
+    <br>
+    <br>
+
+    <div>
+      Q10. List the emails generated by a given facility. The result should be displayed in ascending order by the date
+      of the emails.
+    </div>
+    <div>
+      <label for="facility-id">Facility ID:</label>
+      <input type="number" id="facility-id-q10" name="facility-id-q10" value="1005">
+    </div>
+    <div id="sql-code-block-q10" class="sql-code-block">
+      <pre><code class="language-sql">
+        SELECT Facilities.FID, Email.ID AS Email_ID, Email_logged.EID AS Receiver, Email.text
+        FROM Email_logged
+        JOIN Facilities on Email_logged.FID = Facilities.FID
+        JOIN Email ON Email_logged.ID = Email.ID
+        WHERE Email_logged.FID = ?
+        GROUP BY Email_logged.FID, Email_logged.EID, Email.ID
+        ORDER BY Email_logged.date ASC;
+    </code></pre>
+    </div>
+    <div class="text-right">
+      <button class="btn btn-primary check-sql-q10" data-target="#sql-code-block-q10">Check</button>
+    </div>
+    <br>
+    <div id="query-results-q10"></div>
+    <br>
+    <br>
+
+
+
+    <div>
+      Q11. For a given facility, generate a list of all the doctors and nurses who have been on schedule to work in the
+      last two weeks. The list should include first-name, last-name, and role. Results should be displayed in ascending
+      order by role, then by first name.
+    </div>
+    <div>
+      <label for="facility-id">Facility ID:</label>
+      <input type="number" id="facility-id-q11" name="facility-id-q11" value="1005">
+    </div>
+    <div id="sql-code-block-q11" class="sql-code-block">
+      <pre><code class="language-sql">
+        SELECT DISTINCT E.FName, E.LName, R.Title
+        FROM Employees E
+        JOIN Roles R ON E.EID = R.EID
+        JOIN Schedule S ON E.EID = S.EID
+        WHERE R.FID = ?
+        AND R.title IN ('Doctor', 'Nurse')
+        AND S.date BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 2 WEEK) AND CURRENT_DATE
+        ORDER BY R.title ASC, E.FName ASC;
+    </code></pre>
+    </div>
+    <div class="text-right">
+      <button class="btn btn-primary check-sql-q11" data-target="#sql-code-block-q11">Check</button>
+    </div>
+    <br>
+    <div id="query-results-q11"></div>
+    <br>
+    <br>
+
+
+    <div>
+      Q12. For a given facility, give the total hours scheduled for every role during a specific period. Results should
+      be displayed in ascending order by role.
+    </div>
+    <div>
+      <label for="facility-id">Facility ID:</label>
+      <input type="number" id="facility-id-q12" name="facility-id-q12" value="1005">
+    </div>
+    <div>
+      <label for="startDate">Start Date: </label>
+      <input type="date" id="startDate-q12" name="startDate-q12" value="2023-03-01">
+      <label for="endDate">End Date: </label>
+      <input type="date" id="endDate-q12" name="endDate-q12" value="2023-04-01">
+    </div>
+    <div id="sql-code-block-q12" class="sql-code-block">
+      <pre><code class="language-sql">
+        SELECT R.title, SUM(TIMESTAMPDIFF(HOUR, S.start_time, S.end_time)) AS Total_Hours
+        FROM Roles R
+        JOIN Schedule S ON R.EID = S.EID
+        WHERE R.FID = ?
+        AND S.date BETWEEN ? AND ?
+        GROUP BY R.title
+        ORDER BY R.title ASC;
+    </code></pre>
+    </div>
+    <div class="text-right">
+      <button class="btn btn-primary check-sql-q12" data-target="#sql-code-block-q12">Check</button>
+    </div>
+    <br>
+    <div id="query-results-q12"></div>
+    <br>
+    <br>
+
+
+    <div>
+      Q13. For every facility, provide the province where the facility is located, the facility name, the capacity of
+      the facility, and the total number of employees in the facility who have been infected by COVID-19 in the past two
+      weeks. The results should be displayed in ascending order by province, then by the total number of employees
+      infected.
+    </div>
+    <div id="sql-code-block-q13" class="sql-code-block">
+      <pre><code class="language-sql">
+        SELECT F.Province, F.FName, F.Capacity, COUNT(I.EID) AS Infected_Employees
+        FROM Facilities F
+        LEFT JOIN Roles R ON F.FID = R.FID
+        LEFT JOIN Infection I ON R.EID = I.EID
+        AND I.i_date BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 2 WEEK) AND CURRENT_DATE
+        AND I.Nature = 'COVID-19'
+        GROUP BY F.FID, F.Province, F.FName, F.Capacity
+        ORDER BY F.Province ASC, Infected_Employees ASC;        
+    </code></pre>
+    </div>
+    <div class="text-right">
+      <button class="btn btn-primary check-sql-q13" data-target="#sql-code-block-q13">Check</button>
+    </div>
+    <br>
+    <div id="query-results-q13"></div>
+    <br>
+    <br>
+
+    <div>
+      Q14. For every doctor who is currently working in the province of “Québec”, provide the doctor’s first-name,
+      last-name, the city of residence of the doctor, and the total number of facilities the doctor is currently working
+      for. Results should be displayed in ascending order by city, then in descending order by total number of
+      facilities.
+    </div>
+    <div id="sql-code-block-q14" class="sql-code-block">
+      <pre><code class="language-sql">
+        SELECT E.FName, E.LName, E.city, COUNT(R.FID) as Total_Facilities
+        FROM Employees E
+        JOIN Roles R ON E.EID = R.EID
+        JOIN Facilities F ON R.FID = F.FID
+        WHERE R.title = 'Doctor'
+        AND F.Province = 'QC'
+        AND R.end_date IS NULL 
+        GROUP BY E.EID, E.FName, E.LName, E.city
+        ORDER BY E.city ASC, Total_Facilities DESC; 	   
+    </code></pre>
+    </div>
+    <div class="text-right">
+      <button class="btn btn-primary check-sql-q14" data-target="#sql-code-block-q14">Check</button>
+    </div>
+    <br>
+    <div id="query-results-q14"></div>
+    <br>
+    <br>
+
+
+    <div>
+      Q15. Get details of the nurse(s) who is/are currently working and has the highest number of hours scheduled in the
+      system since they started working as a nurse. Details include first-name, last-name, first day of work as a nurse,
+      date of birth, email address, and total number of hours scheduled.
+    </div>
+    <div id="sql-code-block-q15" class="sql-code-block">
+      <pre><code class="language-sql">
+        SELECT E.FName, E.LName, MIN(R.Start_Date) AS First_Day_Work, E.DoB, E.Email, SUM(TIMESTAMPDIFF(HOUR, S.start_time, S.end_time)) AS Total_Hours
+        FROM Employees E
+        JOIN Roles R ON E.EID = R.EID
+        JOIN Schedule S ON E.EID = S.EID
+        WHERE R.title = 'Nurse'
+        AND R.end_date IS NULL
+        GROUP BY E.EID, E.FName, E.LName, E.DoB, E.Email
+        HAVING Total_Hours = (
+            SELECT MAX(Sub.Total_Hours)
+            FROM (
+                SELECT E2.EID, SUM(TIMESTAMPDIFF(HOUR, S2.start_time, S2.end_time)) AS Total_Hours
+                FROM Employees E2
+                JOIN Roles R2 ON E2.EID = R2.EID
+                JOIN Schedule S2 ON E2.EID = S2.EID
+                WHERE R2.title = 'Nurse'
+                AND (R2.end_date IS NULL OR R2.end_date > CURRENT_DATE)
+                GROUP BY E2.EID
+            ) Sub
+        )
+        ORDER BY E.FName, E.LName;
+    </code></pre>
+    </div>
+    <div class="text-right">
+      <button class="btn btn-primary check-sql-q15" data-target="#sql-code-block-q15">Check</button>
+    </div>
+    <br>
+    <div id="query-results-q15"></div>
+    <br>
+    <br>
+
+
+    <div>
+      Q16. Get details of the nurse(s) or the doctor(s) who are currently working and has been infected by COVID-19 at
+      least three times. Details include first-name, last-name, first day of work as a nurse or as a doctor, role
+      (nurse/doctor), date of birth, email address, and total number of hours scheduled. Results should be displayed
+      sorted in ascending order by role, then by first name, then by last name.
+    </div>
+    <div id="sql-code-block-q16" class="sql-code-block">
+      <pre><code class="language-sql">
+        SELECT E.FName, E.LName, MIN(R.Start_Date) AS First_Day_Work, R.Title as Role, E.DoB, E.Email, SUM(TIMESTAMPDIFF(HOUR, S.start_time, S.end_time)) AS Total_Hours
+        FROM Employees E
+        JOIN Roles R ON E.EID = R.EID
+        JOIN Schedule S ON E.EID = S.EID
+        WHERE (R.Title = 'Nurse' OR R.Title = 'Doctor')
+          AND R.End_Date IS NULL 
+          AND E.EID IN (SELECT I.EID
+            FROM Infection I
+            WHERE I.Nature = 'COVID-19'
+            GROUP BY I.EID
+            HAVING COUNT(*) >= 3)
+        GROUP BY E.EID
+        ORDER BY R.Title ASC, E.FName ASC, E.LName ASC;	
+    </code></pre>
+    </div>
+    <div class="text-right">
+      <button class="btn btn-primary check-sql-q16" data-target="#sql-code-block-q16">Check</button>
+    </div>
+    <br>
+    <div id="query-results-q16"></div>
+    <br>
+    <br>
+
+
+    <div>
+      Q17. Get details of the nurse(s) or doctor(s) who are currently working and has never been infected by COVID-19.
+      Details include first-name, last-name, first day of work as a nurse or as a doctor, role (nurse/doctor), date of
+      birth, email address, and total number of hours scheduled. Results should be displayed sorted in ascending order
+      by role, then by first name, then by last name.
+    </div>
+    <div id="sql-code-block-q17" class="sql-code-block">
+      <pre><code class="language-sql">
+        SELECT E.FName, E.LName, MIN(R.Start_Date) AS First_Day_Work, R.Title as Role, E.DoB, E.Email, SUM(TIMESTAMPDIFF(HOUR, S.start_time, S.end_time)) AS Total_Hours
+        FROM Employees E
+        JOIN Roles R ON E.EID = R.EID
+        JOIN Schedule S ON E.EID = S.EID
+        WHERE (R.Title = 'Nurse' OR R.Title = 'Doctor')
+          AND R.End_Date IS NULL 
+          AND E.EID NOT IN (SELECT DISTINCT I.EID
+            FROM Infection I
+            WHERE I.Nature = 'COVID-19')
+        GROUP BY E.EID
+        ORDER BY R.Title ASC, E.FName ASC, E.LName ASC;
+    </code></pre>
+    </div>
+    <div class="text-right">
+      <button class="btn btn-primary check-sql-q17" data-target="#sql-code-block-q17">Check</button>
+    </div>
+    <br>
+    <div id="query-results-q17"></div>
+    <br>
+    <br>
+
+
+
+
+    <form id="sql-form">
+      <div class="form-group">
+        <label for="sql-code">Enter your SQL code:</label>
+        <textarea class="form-control" id="sql-code" name="sql" rows="10" cols="30"></textarea>
+      </div>
+      <div class="text-right">
+        <input type="password" id="password" placeholder="Enter password">
+        <br>
+        <button type="button" onclick="checkPasswordAndSubmit()" class="btn btn-primary">Check</button>
+      </div>
+    </form>
+    <br>
+    <div id="sql-form-results"></div>
+
+  </div>
+
+  <!-- Add the highlight.js library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+  <script src="highlight/tsql.min.js"></script>
+  <link rel="stylesheet" href="highlight/ssms.min.css" />
+  <script src="query.js"></script>
+</body>
+
+</html>
